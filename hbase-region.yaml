@@ -1,52 +1,35 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: hbase-master
+  name: hbase-regionserver
   namespace: hbase
 spec:
   selector:
     matchLabels:
-      app: hbase-master
-  serviceName: hbase-master
-  replicas: 1
-  updateStrategy:
-    type: RollingUpdate
-  podManagementPolicy: OrderedReady
+      app: hbase-regionserver
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app: hbase-master
+        app: hbase-regionserver
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: "app"
-                    operator: In
-                    values:
-                    - hbase-master
-              topologyKey: "kubernetes.io/hostname"
       containers:
-  
-      - name: hbase-master
-        imagePullPolicy: Always
-        image: "edmundguo/hbase-hadoop:2.0"
-        resources:
-          requests:
-            memory: "1Gi"
-        args: 
-            ["master"]            
+      - name: hbase-regionserver
+        image: edmundguo/hbase-hadoop:2.0
         ports:
-        - containerPort: 16000
+        - containerPort: 16020
           name: server
-        - containerPort: 16010
+        - containerPort: 16030
           name: http
         volumeMounts:
-          - name: hadoop-etc
-            mountPath: /etc/hadoop
-          - name: hbase-etc
-            mountPath: /etc/hbase          
+        - name: hadoop-etc
+          mountPath: /etc/hadoop
+        - name: hbase-etc
+          mountPath: /etc/hbase
+        imagePullPolicy: IfNotPresent
+        args:
+            ["regionserver"]
       volumes:
         - name: hadoop-etc
           configMap:
