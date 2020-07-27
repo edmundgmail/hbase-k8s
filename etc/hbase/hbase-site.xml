@@ -59,6 +59,11 @@
  </property>
 
  <property>
+  <name>hbase.zookeeper.quorum</name>
+  <value>zk-hs</value>
+</property>
+
+ <property>
    <name>hbase.unsafe.stream.capability.enforce</name>
    <value>false</value>
  </property>
