@@ -5,9 +5,9 @@ HBASE_CONFIG_DIR=/etc/hbase
 HADOOP_CONFIG_DIR=/etc/hadoop 
 
 if [ "$1" == "regionserver" ]; then
-  args = "--hosts ${HBASE_REGIONSERVERS}"
+  ARGS = "--hosts ${HBASE_REGIONSERVERS}"
 elif [ "$1" == "master-backup" ]; then
-  args = "--hosts ${HBASE_BACK_MASTERS}"    	
+  ARGS = "--hosts ${HBASE_BACK_MASTERS}"    	
 fi
 
 if [ -d $HBASE_CONFIG_DIR ]; then
