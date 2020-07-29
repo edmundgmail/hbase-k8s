@@ -9,6 +9,7 @@ spec:
       app: hbase-regionserver
   strategy:
     type: Recreate
+  replicas: 10     
   template:
     metadata:
       labels:
@@ -22,6 +23,12 @@ spec:
           name: server
         - containerPort: 16030
           name: http
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 16010
+          initialDelaySeconds: 60
+          periodSeconds: 60
         volumeMounts:
         - name: hadoop-etc
           mountPath: /etc/hadoop
@@ -30,6 +37,9 @@ spec:
         imagePullPolicy: IfNotPresent
         args:
             ["regionserver"]
+#      securityContext:
+#        runAsUser: 1000
+#        fsGroup: 1000            
       volumes:
         - name: hadoop-etc
           configMap:

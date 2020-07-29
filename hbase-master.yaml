@@ -48,11 +48,21 @@ spec:
           name: server
         - containerPort: 16010
           name: http
+        livenessProbe:
+            httpGet:
+              path: /
+              port: 16010
+            initialDelaySeconds: 60
+            periodSeconds: 60
         volumeMounts:
           - name: hadoop-etc
             mountPath: /etc/hadoop
           - name: hbase-etc
             mountPath: /etc/hbase          
+#      securityContext:
+#        runAsUser: 1000
+#        fsGroup: 1000            
+      
       volumes:
         - name: hadoop-etc
           configMap:
